@@ -26,8 +26,8 @@ If you need to do anything else, you'll get a message box explaining it.
 ## Note:
 
 When this readme was written, the latest Mod Organizer release was 2.1.1, but this has issues with the Python plugin interface (and you had to manually find and install a plugin to make Morrowind work).
-These issues should be resolved by the release after this, but some of these fixes haven't even made it to an internal testing build as of 2018-03-19.
-If MO 2.1.1 is still the latest release, you'll probably have to build your own Mod Organizer to use this.
+These issues will be resolved by the release after this, but these fixes are only available in a pre-release internal testing build as of 2018-03-21.
+If MO 2.1.1 is still the latest release, you'll probably have to visit the Mod Organizer Discord server to get a beta build to use this.
 
 ## Future possibilities
 
