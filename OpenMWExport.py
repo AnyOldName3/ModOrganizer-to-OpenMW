@@ -37,7 +37,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(1, 0, 0, mobase.ReleaseType.final)
+        return mobase.VersionInfo(1, 1, 0, mobase.ReleaseType.final)
 
     def isActive(self):
         return True
@@ -93,10 +93,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
                 openmwcfg.write(u"content=" + loadOrder[pluginIndex] + u"\n")
-        QMessageBox.information(self.__parentWidget, self.__tr("OpenMW Export Complete"), self.__tr("The export to OpenMW completed successfully. The current setup was saved to ") + configPath)
+        QMessageBox.information(self.__parentWidget, self.__tr("OpenMW Export Complete"), self.__tr("The export to OpenMW completed successfully. The current setup was saved to {0}"),format(configPath))
     
     def __tr(self, str):
-        return QCoreApplication.translate(self.name(), str)
+        return QCoreApplication.translate("OpenMWExportPlugin", str)
     
     def __processMod(self, configFile, modName):
         state = self.__organizer.modList().state(modName)
