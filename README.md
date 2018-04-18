@@ -34,9 +34,8 @@ If MO 2.1.1 is still the latest release, you'll probably have to visit the Mod O
 
 As of version 1.1, this plugin has a `.ts` file.
 This allows people who know multiple languages to create translations of it.
-Using either Qt Linguist or your l33t h4x0r skillz and a text editor, you can fill this file with text in your own language.
-This can be converted to a `.qm` file (somehow) and if you get this to me, I can provide it as an optional download so others can use it, too.
-If someone tells me a simple way of getting Transifex involved, I might set that up.
+You can contribute your own translations at https://www.transifex.com/anyoldname3/modorganizer-to-openmw and I'll try to include them in the next release.
+If you want to translate to a language that isn't listed there, there should be a Request Language button somewhere.
 
 ## Future possibilities
 
