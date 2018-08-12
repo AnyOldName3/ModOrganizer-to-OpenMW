@@ -37,7 +37,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(1, 1, 1, mobase.ReleaseType.final)
+        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.alpha)
 
     def isActive(self):
         return True
@@ -75,10 +75,9 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             return
         # Clear out the existing data= and content= lines from openmw.cfg
         self.__clearOpenMWConfig(configPath)
-        import codecs
-        with codecs.open(configPath, "a", "utf-8") as openmwcfg:
+        with open(configPath, "a", encoding="utf-8") as openmwcfg:
             # write out data directories
-            openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath().decode("utf-8")))
+            openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
             for mod in self.__organizer.modsSortedByProfilePriority():
                 self.__processMod(openmwcfg, mod)
             self.__processMod(openmwcfg, "Overwrite")
@@ -101,7 +100,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     def __processMod(self, configFile, modName):
         state = self.__organizer.modList().state(modName)
         if (state & 0x2) != 0 or modName == "Overwrite":
-            path = self.__organizer.getMod(modName).absolutePath().decode("utf-8")
+            path = self.__organizer.getMod(modName).absolutePath()
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
     
@@ -119,16 +118,15 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         import tempfile
         import os
         import shutil
-        import codecs
         # copy the lines we want to keep to a temp file
         tempFileName = None
-        with tempfile.NamedTemporaryFile(delete = False) as f:
+        with tempfile.NamedTemporaryFile(delete = False, encoding="utf-8") as f:
             tempFileName = f.name
             lastLine = None
-            with codecs.open(configPath, "r", "utf-8-sig") as openmwcfg:
+            with open(configPath, "r", encoding="utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
                     if not line.startswith("data=") and not line.startswith("content="):
-                        f.write(line.encode("utf-8"))
+                        f.write(line)
                         lastLine = line
             # ensure the last line ended with a line break
             if not lastLine.endswith("\n"):
