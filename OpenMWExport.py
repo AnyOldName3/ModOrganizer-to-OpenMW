@@ -120,9 +120,9 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         import shutil
         # copy the lines we want to keep to a temp file
         tempFileName = None
-        with tempfile.NamedTemporaryFile(delete = False, encoding="utf-8") as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete = False, encoding="utf-8") as f:
             tempFileName = f.name
-            lastLine = None
+            lastLine = ""
             with open(configPath, "r", encoding="utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
                     if not line.startswith("data=") and not line.startswith("content="):
