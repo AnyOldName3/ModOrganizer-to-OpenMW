@@ -61,7 +61,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         # We should test if the current game is compatible with OpenMW here
         # We can't do that directly, so instead we just test if the current game is Morrowind
         game = self.__organizer.managedGame()
-        if game.gameName() != u"Morrowind":
+        if game.gameName() != "Morrowind":
             QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible game"), self.__tr("(At least when this plugin is being written) OpenMW only supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so the export will abort. If you think you know better than this message, update this plugin."))
             return
         # Give the user the opportunity to abort
@@ -81,7 +81,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath().decode("utf-8")))
             for mod in self.__organizer.modsSortedByProfilePriority():
                 self.__processMod(openmwcfg, mod)
-            self.__processMod(openmwcfg, u"Overwrite")
+            self.__processMod(openmwcfg, "Overwrite")
             
             # write out content (plugin) files
             # order content files by load order
@@ -92,7 +92,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
                     loadOrder[loadIndex] = plugin
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
-                openmwcfg.write(u"content=" + loadOrder[pluginIndex] + u"\n")
+                openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
         QMessageBox.information(self.__parentWidget, self.__tr("OpenMW Export Complete"), self.__tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
     
     def __tr(self, str):
@@ -100,7 +100,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __processMod(self, configFile, modName):
         state = self.__organizer.modList().state(modName)
-        if (state & 0x2) != 0 or modName == u"Overwrite":
+        if (state & 0x2) != 0 or modName == "Overwrite":
             path = self.__organizer.getMod(modName).absolutePath().decode("utf-8")
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
@@ -109,7 +109,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         # boost::filesystem::path uses a weird format in order to round-trip being constructed from a stream correctly, even when quotation characters are in the path
         processedPath = "data=\""
         for character in dataPath:
-            if character == u'&' or character == u'"':
+            if character == '&' or character == '"':
                 processedPath += "&"
             processedPath += character
         processedPath += "\"\n"
@@ -127,11 +127,11 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             lastLine = None
             with codecs.open(configPath, "r", "utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
-                    if not line.startswith(u"data=") and not line.startswith(u"content="):
+                    if not line.startswith("data=") and not line.startswith("content="):
                         f.write(line.encode("utf-8"))
                         lastLine = line
             # ensure the last line ended with a line break
-            if not lastLine.endswith(u"\n"):
+            if not lastLine.endswith("\n"):
                 f.write("\n")
         # remove the original file
         os.remove(configPath)
