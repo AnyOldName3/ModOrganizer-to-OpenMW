@@ -8,7 +8,7 @@
 
 import sys
 
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, qCritical
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QFileDialog
@@ -25,6 +25,9 @@ class OpenMWExportPlugin(mobase.IPluginTool):
 
     def init(self, organizer):
         self.__organizer = organizer
+        if sys.version_info < (3, 0):
+            qCritical(self.__tr("OpenMWExport plugin requires a Python 3 interpreter, but is running on a Python 2 interpreter."))
+            QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. You should check for an updated version, including in the Mod Organizer 2 Development Discord Server."))
         return True
 
     def name(self):
