@@ -8,7 +8,7 @@
 
 import sys
 
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, qDebug
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QFileDialog
@@ -88,6 +88,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             loadOrder = {}
             for plugin in self.__organizer.pluginList().pluginNames():
                 loadIndex = self.__organizer.pluginList().loadOrder(plugin)
+                qDebug(plugin + "," + str(loadIndex))
                 if loadIndex >= 0:
                     loadOrder[loadIndex] = plugin
             # actually write out the list
