@@ -74,7 +74,7 @@
     </message>
     <message>
         <location filename="OpenMWExport.py" line="30"/>
-        <source>This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. You should check for an updated version, including in the Mod Organizer 2 Development Discord Server.</source>
+        <source>This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. Mod Organizer 2.1.6 is the earliest compatible version. You should check for an update.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

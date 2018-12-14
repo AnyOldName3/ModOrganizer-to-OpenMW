@@ -27,7 +27,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         self.__organizer = organizer
         if sys.version_info < (3, 0):
             qCritical(self.__tr("OpenMWExport plugin requires a Python 3 interpreter, but is running on a Python 2 interpreter."))
-            QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. You should check for an updated version, including in the Mod Organizer 2 Development Discord Server."))
+            QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. Mod Organizer 2.1.6 is the earliest compatible version. You should check for an update."))
         return True
 
     def name(self):
@@ -40,7 +40,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.alpha)
+        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.final)
 
     def isActive(self):
         return True
