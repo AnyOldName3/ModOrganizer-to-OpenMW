@@ -26,10 +26,9 @@ If you need to do anything else, you'll get a message box explaining it.
 
 ## Note:
 
-ModOrganizer-to-OpenMW has been upgraded to take advantage of Python 3.
-When this readme was written, the latest Mod Organizer release was 2.1.4, but this still has a Python 2 interpreter.
-The upgrade to Python 3 will be included in a later MO release, but is only available in a pre-release internal testing build as of 2018-08-13.
-If MO 2.1.4 is still the latest release, you'll probably have to visit the Mod Organizer Discord server to get a beta build to use this.
+As of version 2.0.0, ModOrganizer-to-OpenMW has been upgraded to take advantage of Python 3.
+The upgrade to Python 3 is included in the MO 2.1.6 release, and older versions are not compatible with the latest version of this plugin.
+If MO 2.1.5 is still the latest release, you'll probably have to visit the Mod Organizer Discord server to get a release candidate build to use this.
 You can still use older versions of this plugin in older Mod Organizer builds (although MO 2.1.2 is the minimum which will work).
 
 ## Translating this plugin:
