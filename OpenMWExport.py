@@ -43,7 +43,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.final)
 
     def isActive(self):
-        return True
+        if self.__organizer.managedGame().gameName() == "Morrowind":
+            return True
+        else:
+            return False
 
     def settings(self):
         return []
