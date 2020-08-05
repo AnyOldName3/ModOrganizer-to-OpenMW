@@ -8,7 +8,7 @@
 
 import sys
 
-from PyQt5.QtCore import QCoreApplication, qCritical
+from PyQt5.QtCore import QCoreApplication, QStandardPaths, qCritical
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QFileDialog
@@ -141,10 +141,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __getOpenMWConfigPath(self):
         # We're too sandboxed to reliably find the documents directory, so there are a few fallbacks here
-        defaultLocation = os.path.join(os.path.expanduser("~"), "Documents", "My Games", "OpenMW", "openmw.cfg")
+        defaultLocation = QStandardPaths.locate(QStandardPaths.DocumentsLocation, os.path.join("My Games", "OpenMW", "openmw.cfg"))
         if os.path.isfile(defaultLocation):
             return defaultLocation
-        # If we've got this far, then the user has put their documents folder somewhere other than the default, so they can find it themselves.
+        # If we've got this far, then the user is doing something very weird, so they can find it themselves.
         return QFileDialog.getOpenFileName(self.__parentWidget, self.__tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0]
     
 def createPlugin():

@@ -58,7 +58,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="149"/>
+        <location filename="OpenMWExport.py" line="148"/>
         <source>Locate OpenMW Config File</source>
         <translation type="unfinished"></translation>
     </message>
