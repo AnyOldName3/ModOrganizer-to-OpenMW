@@ -38,6 +38,20 @@ This allows people who know multiple languages to create translations of it.
 You can contribute your own translations at https://www.transifex.com/anyoldname3/modorganizer-to-openmw and I'll try to include them in the next release.
 If you want to translate to a language that isn't listed there, there should be a Request Language button somewhere.
 
+## Building this plugin
+
+As this plugin is pure Python, it doesn't need building - you can just copy the files into place by hand.
+However, obviously that won't update the translation files, and can become annoying when working on the plugin, as you'll need to do it repeatedly.
+Because of that, some automation is provided:
+
+
+`install.ps1` will regenerate the `.ts` file and copy the plugin files to the location specified by its first argument or given via stdin.
+To use it, you'll need a Python interpreter with some version of PyQt5's `PyQt5.pylupdate_main` package installed to be available in the current shell.
+If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt5` will get you what you need.
+
+Also, a VS Code `tasks.json` file is provided that will call the install script as a build task.
+To specify the install destination, create a file in the `.vscode` directory called `InstallDestination.txt` containing the path to the MO2 plugins directory.
+
 ## Future possibilities
 
 * As the Mod Organizer Morrowind plugin matures, this tool will gradually become more useful.
