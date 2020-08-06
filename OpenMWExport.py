@@ -11,8 +11,7 @@ import sys
 
 from PyQt5.QtCore import QCoreApplication, QStandardPaths, qCritical
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 if "mobase" not in sys.modules:
     import mobase
@@ -21,7 +20,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
-        self.__organizer = None
+        self.__organizer : mobase.IOrganizer = None
 
     def init(self, organizer):
         self.__organizer = organizer
@@ -40,7 +39,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.final)
+        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.FINAL)
 
     def isActive(self):
         return (self.__organizer.managedGame().gameName() == "Morrowind")
@@ -116,11 +115,12 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __clearOpenMWConfig(self, configPath):
         import tempfile
+        import os
         import shutil
         # copy the lines we want to keep to a temp file
         tempFilePath = None
         with tempfile.NamedTemporaryFile(mode="w", delete = False, encoding="utf-8") as f:
-            tempFilePath = Path(f.name)
+            tempFilePath = f.name
             lastLine = ""
             with configPath.open("r", encoding="utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
