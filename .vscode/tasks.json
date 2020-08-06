@@ -6,7 +6,7 @@
         {
             "label": "Install",
             "type": "shell",
-            "command": ".\\install.ps1 $(Get-Content .vscode\\InstallDestination.txt)",
+            "command": "if (Test-Path env\\Scripts\\Activate.ps1) { .\\env\\Scripts\\activate } ; .\\install.ps1 $(Get-Content .vscode\\InstallDestination.txt)",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
