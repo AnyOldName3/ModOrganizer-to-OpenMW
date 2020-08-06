@@ -6,6 +6,7 @@
 
 # Also, if Mod Organizer ever re-implements archive handling, then it wouldn't be too hard to make this also copy the list of these to fallback-archive= lines.
 
+from pathlib import Path
 import sys
 
 from PyQt5.QtCore import QCoreApplication, QStandardPaths, qCritical
@@ -73,12 +74,12 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             return
         # Get the path to the OpenMW.cfg file
         configPath = self.__getOpenMWConfigPath()
-        if not os.path.isfile(configPath):
+        if not configPath.is_file():
             QMessageBox.critical(self.__parentWidget, self.__tr("Config file not specified"), self.__tr("No config file was specified"))
             return
         # Clear out the existing data= and content= lines from openmw.cfg
         self.__clearOpenMWConfig(configPath)
-        with open(configPath, "a", encoding="utf-8") as openmwcfg:
+        with configPath.open("a", encoding="utf-8") as openmwcfg:
             # write out data directories
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
             for mod in self.__organizer.modsSortedByProfilePriority():
@@ -119,14 +120,13 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __clearOpenMWConfig(self, configPath):
         import tempfile
-        import os
         import shutil
         # copy the lines we want to keep to a temp file
-        tempFileName = None
+        tempFilePath = None
         with tempfile.NamedTemporaryFile(mode="w", delete = False, encoding="utf-8") as f:
-            tempFileName = f.name
+            tempFilePath = Path(f.name)
             lastLine = ""
-            with open(configPath, "r", encoding="utf-8-sig") as openmwcfg:
+            with configPath.open("r", encoding="utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
                     if not line.startswith("data=") and not line.startswith("content="):
                         f.write(line)
@@ -134,18 +134,17 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             # ensure the last line ended with a line break
             if not lastLine.endswith("\n"):
                 f.write("\n")
-        # remove the original file
+        # we can't move to Path.replace due to https://bugs.python.org/issue29805
         os.remove(configPath)
-        # put the temporary file where the original was
-        shutil.move(tempFileName, configPath)
+        shutil.move(tempFilePath, configPath)
     
     def __getOpenMWConfigPath(self):
         # We're too sandboxed to reliably find the documents directory, so there are a few fallbacks here
-        defaultLocation = QStandardPaths.locate(QStandardPaths.DocumentsLocation, os.path.join("My Games", "OpenMW", "openmw.cfg"))
-        if os.path.isfile(defaultLocation):
+        defaultLocation = Path(QStandardPaths.locate(QStandardPaths.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
+        if defaultLocation.is_file():
             return defaultLocation
         # If we've got this far, then the user is doing something very weird, so they can find it themselves.
-        return QFileDialog.getOpenFileName(self.__parentWidget, self.__tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0]
+        return Path(QFileDialog.getOpenFileName(self.__parentWidget, self.__tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
     
 def createPlugin():
     return OpenMWExportPlugin()
