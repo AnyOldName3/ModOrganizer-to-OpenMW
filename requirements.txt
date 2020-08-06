@@ -1,0 +1,5 @@
+# Stubs for linter and autocompletion. Automatically includes PyQt5 stubs for latest MO2 release.
+mobase-stubs
+mypy
+# MO2's PyQt5 gets used for builds. We only need the pylupdate_main subpackage, but that can't be installed on its own.
+PyQt5

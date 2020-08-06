@@ -49,8 +49,33 @@ Because of that, some automation is provided:
 To use it, you'll need a Python interpreter with some version of PyQt5's `PyQt5.pylupdate_main` package installed to be available in the current shell.
 If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt5` will get you what you need.
 
+Stubs for MO2's plugin API are available in the `mobase-stubs` pypi package
+
+By far the easiest way to get linting and pylupdate working is just to create a venv and install the packages in `requirements.txt`:
+```powershell
+python -m venv env
+.\env\scripts\activate
+python -m pip install -r requirements.txt
+```
+Once this venv exists, editors like VS Code should pick it up and use it automatically (although they might need restarting first).
+
 Also, a VS Code `tasks.json` file is provided that will call the install script as a build task.
 To specify the install destination, create a file in the `.vscode` directory called `InstallDestination.txt` containing the path to the MO2 plugins directory.
+Linting won't work with its default `pylint` linter as native packages with stubs are used, and in mid-2020, `pylint` doesn't support stubs.
+However, `mypy` works just fine once it's aware of the stubs.
+Battles were waged to try and make `mypy` see the stubs when they weren't in a venv and it was too complicated to document and reliably reproduce.
+Just use the venv.
+
+You'll probably want to create a `.vscode/settings.json` resembling:
+```json
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.pythonPath": "env\\Scripts\\python.exe"
+}
+```
+This isn't checked in as you'll likely end up with local changes.
+It would be nice if JSON had include directives like YAML.
 
 ## Future possibilities
 

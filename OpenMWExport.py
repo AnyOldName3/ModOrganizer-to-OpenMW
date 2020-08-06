@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QFileDialog
 
 if "mobase" not in sys.modules:
-    import mock_mobase as mobase
+    import mobase
 
 class OpenMWExportPlugin(mobase.IPluginTool):
     
