@@ -20,7 +20,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
-        self.__organizer : mobase.IOrganizer = None
+        self.__organizer : mobase.IOrganizer
 
     def init(self, organizer):
         self.__organizer = organizer
