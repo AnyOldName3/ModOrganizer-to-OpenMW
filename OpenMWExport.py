@@ -24,9 +24,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
 
     def init(self, organizer):
         self.__organizer = organizer
-        if sys.version_info < (3, 0):
-            qCritical(self.__tr("OpenMWExport plugin requires a Python 3 interpreter, but is running on a Python 2 interpreter."))
-            QMessageBox.critical(self._parentWidget(), self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python 3 interpreter, but Mod Organizer has provided a Python 2 interpreter. Mod Organizer 2.1.6 is the earliest compatible version. You should check for an update."))
+        if sys.version_info < (3, 6):
+            qCritical(self.__tr("OpenMWExport plugin requires a Python {0} interpreter or newer, but is running on a Python {1} interpreter.").format("3.6", ".".join(map(str, sys.version_info[:3]))))
+            QMessageBox.critical(self._parentWidget(), self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python {0} interpreter or newer, but Mod Organizer has provided a Python {1} interpreter. Mod Organizer {2} is the earliest compatible version. You should check for an update.").format("3.6", ".".join(map(str, sys.version_info[:3])), "2.1.6"))
+            return False
         return True
 
     def name(self):
