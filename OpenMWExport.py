@@ -9,8 +9,8 @@
 from pathlib import Path
 import sys
 
-from PyQt5.QtCore import QCoreApplication, QStandardPaths, qCritical
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QCoreApplication, QStandardPaths, QUrl, qCritical
+from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 if "mobase" not in sys.modules:
@@ -21,6 +21,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
         self.__organizer : mobase.IOrganizer
+        self.__nexusBridge : mobase.IModRepositoryBridge
 
     def init(self, organizer):
         self.__organizer = organizer
@@ -28,6 +29,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             qCritical(self.__tr("OpenMWExport plugin requires a Python {0} interpreter or newer, but is running on a Python {1} interpreter.").format("3.6", ".".join(map(str, sys.version_info[:3]))))
             QMessageBox.critical(self._parentWidget(), self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python {0} interpreter or newer, but Mod Organizer has provided a Python {1} interpreter. Mod Organizer {2} is the earliest compatible version. You should check for an update.").format("3.6", ".".join(map(str, sys.version_info[:3])), "2.1.6"))
             return False
+        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 3, 1):
+            self.__nexusBridge = self.__organizer.createNexusBridge()
+            self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
+            self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
         return True
 
     def name(self):
@@ -142,6 +147,16 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             return defaultLocation
         # If we've got this far, then the user is doing something very weird, so they can find it themselves.
         return Path(QFileDialog.getOpenFileName(self._parentWidget(), self.__tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
+    
+    def __checkForUpdate(self, mainWindow):
+        self.__nexusBridge.requestDescription("Morrowind", 45642, None)
+
+    def __onDescriptionReceived(self, gameName, modID, userData, resultData):
+        version = mobase.VersionInfo(resultData["version"])
+        if self.version() < version:
+            response = QMessageBox.question(self._parentWidget(), self.__tr("Plugin update available"), self.__tr("{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?").format(self.displayName(), self.version(), version))
+            if response == QMessageBox.Yes:
+                QDesktopServices.openUrl(QUrl("https://www.nexusmods.com/morrowind/mods/45642"))
     
 def createPlugin():
     return OpenMWExportPlugin()
