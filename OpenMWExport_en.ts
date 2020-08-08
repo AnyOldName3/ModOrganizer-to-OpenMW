@@ -58,7 +58,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="149"/>
+        <location filename="OpenMWExport.py" line="148"/>
         <source>Locate OpenMW Config File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,12 +78,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="157"/>
+        <location filename="OpenMWExport.py" line="156"/>
         <source>Plugin update available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="157"/>
+        <location filename="OpenMWExport.py" line="156"/>
         <source>{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?</source>
         <translation type="unfinished"></translation>
     </message>

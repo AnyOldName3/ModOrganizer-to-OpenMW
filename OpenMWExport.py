@@ -141,7 +141,6 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         shutil.move(tempFilePath, configPath)
     
     def __getOpenMWConfigPath(self):
-        # We're too sandboxed to reliably find the documents directory, so there are a few fallbacks here
         defaultLocation = Path(QStandardPaths.locate(QStandardPaths.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
         if defaultLocation.is_file():
             return defaultLocation
