@@ -11,6 +11,10 @@ if (!$?) {
     Write-Error "pylupdate failed." -ErrorAction Stop
 }
 
+if ( -Not (Test-Path -PathType Container $InstallPath)) {
+    New-Item -ItemType Directory $InstallPath -ErrorAction Stop
+}
+
 Copy-Item OpenMWExport.py,openmw.ico $InstallPath -ErrorAction Stop
 
 Write-Output "Done."
