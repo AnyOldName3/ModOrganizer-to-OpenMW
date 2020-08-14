@@ -2,7 +2,8 @@
 param (
     [Parameter(Mandatory=$true)]
     [string]
-    $InstallPath
+    $InstallPath,
+    [switch] $Release
 )
 
 python -m PyQt5.pylupdate_main OpenMWExport.py -ts OpenMWExport_en.ts
@@ -16,5 +17,9 @@ if ( -Not (Test-Path -PathType Container $InstallPath)) {
 }
 
 Copy-Item OpenMWExport.py,openmw.ico $InstallPath -ErrorAction Stop
+
+if ($Release) {
+    Copy-Item LICENSE,README.md $InstallPath -ErrorAction Stop
+}
 
 Write-Output "Done."
