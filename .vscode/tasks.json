@@ -12,6 +12,13 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Release",
+            "type": "shell",
+            "command": "if (Test-Path env\\Scripts\\Activate.ps1) { .\\env\\Scripts\\activate } ; .\\install.ps1 $(Get-Content .vscode\\ReleaseDestination.txt) -Release",
+            "problemMatcher": [],
+            "group": "build"
         }
     ]
 }

@@ -1,4 +1,5 @@
 .vscode/InstallDestination.txt
+.vscode/ReleaseDestination.txt
 .vscode/launch.json
 .vscode/settings.json
 env

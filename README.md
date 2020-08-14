@@ -46,6 +46,7 @@ Because of that, some automation is provided:
 
 
 `install.ps1` will regenerate the `.ts` file and copy the plugin files to the location specified by its first argument or given via stdin.
+If the `-Release` flag is passed, it'll also copy the licence and readme, making it easier to do a release.
 To use it, you'll need a Python interpreter with some version of PyQt5's `PyQt5.pylupdate_main` package installed to be available in the current shell.
 If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt5` will get you what you need.
 
@@ -61,6 +62,7 @@ Once this venv exists, editors like VS Code should pick it up and use it automat
 
 Also, a VS Code `tasks.json` file is provided that will call the install script as a build task.
 To specify the install destination, create a file in the `.vscode` directory called `InstallDestination.txt` containing the path to the MO2 plugins directory.
+It also includes another build task for calling the release script which uses `.vscode/ReleaseDestination.txt`.
 Linting won't work with its default `pylint` linter as native packages with stubs are used, and in mid-2020, `pylint` doesn't support stubs.
 However, `mypy` works just fine once it's aware of the stubs.
 Battles were waged to try and make `mypy` see the stubs when they weren't in a venv and it was too complicated to document and reliably reproduce.
