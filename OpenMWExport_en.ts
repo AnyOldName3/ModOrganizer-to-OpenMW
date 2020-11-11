@@ -8,57 +8,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="57"/>
+        <location filename="OpenMWExport.py" line="62"/>
         <source>Export to OpenMW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="60"/>
+        <location filename="OpenMWExport.py" line="65"/>
         <source>Exports the current mod list and plugin load order to OpenMW.cfg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="70"/>
+        <location filename="OpenMWExport.py" line="75"/>
         <source>Incompatible game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="70"/>
+        <location filename="OpenMWExport.py" line="75"/>
         <source>(At least when this plugin is being written) OpenMW only supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so the export will abort. If you think you know better than this message, update this plugin.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="73"/>
+        <location filename="OpenMWExport.py" line="78"/>
         <source>Before starting export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="73"/>
+        <location filename="OpenMWExport.py" line="78"/>
         <source>Before starting the export to OpenMW, please ensure you&apos;ve backed up anything in OpenMW.cfg which you do not want to risk losing forever.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="79"/>
+        <location filename="OpenMWExport.py" line="84"/>
         <source>Config file not specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="79"/>
+        <location filename="OpenMWExport.py" line="84"/>
         <source>No config file was specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="100"/>
+        <location filename="OpenMWExport.py" line="105"/>
         <source>OpenMW Export Complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="100"/>
+        <location filename="OpenMWExport.py" line="105"/>
         <source>The export to OpenMW completed successfully. The current setup was saved to {0}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="148"/>
+        <location filename="OpenMWExport.py" line="153"/>
         <source>Locate OpenMW Config File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,12 +78,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="156"/>
+        <location filename="OpenMWExport.py" line="161"/>
         <source>Plugin update available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="OpenMWExport.py" line="156"/>
+        <location filename="OpenMWExport.py" line="161"/>
         <source>{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?</source>
         <translation type="unfinished"></translation>
     </message>
