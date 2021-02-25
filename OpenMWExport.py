@@ -68,6 +68,11 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QIcon("plugins/openmw.ico")
 
     def display(self):
+        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
+            allModsByProfilePriority = self.__organizer.modList().allModsByProfilePriority
+        else:
+            allModsByProfilePriority = self.__organizer.modsSortedByProfilePriority
+
         # We should test if the current game is compatible with OpenMW here
         # We can't do that directly, so instead we just test if the current game is Morrowind
         game = self.__organizer.managedGame()
@@ -88,7 +93,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         with configPath.open("a", encoding="utf-8") as openmwcfg:
             # write out data directories
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
-            for mod in self.__organizer.modsSortedByProfilePriority():
+            for mod in allModsByProfilePriority():
                 self.__processMod(openmwcfg, mod)
             self.__processMod(openmwcfg, "Overwrite")
             
@@ -108,9 +113,14 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QCoreApplication.translate("OpenMWExportPlugin", str)
     
     def __processMod(self, configFile, modName):
+        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
+            getMod = self.__organizer.modList().getMod
+        else:
+            getMod = self.__organizer.getMod
+        
         state = self.__organizer.modList().state(modName)
         if (state & 0x2) != 0 or modName == "Overwrite":
-            path = self.__organizer.getMod(modName).absolutePath()
+            path = getMod(modName).absolutePath()
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
     
