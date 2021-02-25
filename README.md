@@ -50,7 +50,15 @@ If the `-Release` flag is passed, it'll also copy the licence and readme, making
 To use it, you'll need a Python interpreter with some version of PyQt5's `PyQt5.pylupdate_main` package installed to be available in the current shell.
 If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt5` will get you what you need.
 
-Stubs for MO2's plugin API are available in the `mobase-stubs` pypi package
+Stubs for MO2's plugin API are available in the `mobase-stubs` pypi package.
+This package depends on the specific Python point release that the corresponding MO2 version uses as its interpreter.
+If you see this error message
+```
+ERROR: Could not find a version that satisfies the requirement mobase-stubs
+ERROR: No matching distribution found for mobase-stubs
+```
+you are most likely trying to install the package into a too-old or too-new Python environment.
+Multiple Python installs can be present on the same machine, so you can have the required version in parallel.
 
 By far the easiest way to get linting and pylupdate working is just to create a venv and install the packages in `requirements.txt`:
 ```powershell
