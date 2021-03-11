@@ -45,7 +45,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(3, 1, 0, mobase.ReleaseType.ALPHA)
+        return mobase.VersionInfo(3, 1, 0, mobase.ReleaseType.BETA)
 
     def requirements(self):
         return [
