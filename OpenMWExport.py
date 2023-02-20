@@ -25,14 +25,9 @@ class OpenMWExportPlugin(mobase.IPluginTool):
 
     def init(self, organizer):
         self.__organizer = organizer
-        if sys.version_info < (3, 6):
-            qCritical(OpenMWExportPlugin.tr("OpenMWExport plugin requires a Python {0} interpreter or newer, but is running on a Python {1} interpreter.").format("3.6", ".".join(map(str, sys.version_info[:3]))))
-            QMessageBox.critical(self._parentWidget(), OpenMWExportPlugin.tr("Incompatible Python version."), OpenMWExportPlugin.tr("This version of the OpenMW Export plugin requires a Python {0} interpreter or newer, but Mod Organizer has provided a Python {1} interpreter. Mod Organizer {2} is the earliest compatible version. You should check for an update.").format("3.6", ".".join(map(str, sys.version_info[:3])), "2.1.6"))
-            return False
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 3, 1):
-            self.__nexusBridge = self.__organizer.createNexusBridge()
-            self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
-            self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
+        self.__nexusBridge = self.__organizer.createNexusBridge()
+        self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
+        self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
         return True
 
     def name(self):
@@ -68,11 +63,6 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QIcon("plugins/openmw.ico")
     
     def display(self):
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
-            allModsByProfilePriority = self.__organizer.modList().allModsByProfilePriority
-        else:
-            allModsByProfilePriority = self.__organizer.modsSortedByProfilePriority
-
         # We should test if the current game is compatible with OpenMW here
         # We can't do that directly, so instead we just test if the current game is Morrowind
         game = self.__organizer.managedGame()
@@ -93,7 +83,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         with configPath.open("a", encoding="utf-8") as openmwcfg:
             # write out data directories
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
-            for mod in allModsByProfilePriority():
+            for mod in self.__organizer.modList().allModsByProfilePriority():
                 self.__processMod(openmwcfg, mod)
             self.__processMod(openmwcfg, "Overwrite")
             
@@ -114,19 +104,15 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QCoreApplication.translate("OpenMWExportPlugin", str)
     
     def __processMod(self, configFile, modName):
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
-            getMod = self.__organizer.modList().getMod
-        else:
-            getMod = self.__organizer.getMod
-        
         state = self.__organizer.modList().state(modName)
         if (state & 0x2) != 0 or modName == "Overwrite":
-            path = getMod(modName).absolutePath()
+            path = self.__organizer.modList().getMod(modName).absolutePath()
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
     
     def __processDataPath(self, dataPath):
-        # boost::filesystem::path uses a weird format in order to round-trip being constructed from a stream correctly, even when quotation characters are in the path
+        # boost::filesystem::path uses a weird format in order to round-trip being constructed from a stream correctly, even when quotation characters are in the path.
+        # Modern OpenMW versions don't require this unless the path begins or ends in whitespace, or begins with a double quote, but do it anyway for backwards compatibility.
         processedPath = "data=\""
         for character in dataPath:
             if character == '&' or character == '"':
