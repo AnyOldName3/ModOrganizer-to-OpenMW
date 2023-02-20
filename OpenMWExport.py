@@ -9,9 +9,9 @@
 from pathlib import Path
 import sys
 
-from PyQt5.QtCore import QCoreApplication, QStandardPaths, QUrl, qCritical
-from PyQt5.QtGui import QDesktopServices, QIcon
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt6.QtCore import QCoreApplication, QStandardPaths, QUrl, qCritical
+from PyQt6.QtGui import QDesktopServices, QIcon
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
 if "mobase" not in sys.modules:
     import mobase
@@ -25,14 +25,9 @@ class OpenMWExportPlugin(mobase.IPluginTool):
 
     def init(self, organizer):
         self.__organizer = organizer
-        if sys.version_info < (3, 6):
-            qCritical(self.__tr("OpenMWExport plugin requires a Python {0} interpreter or newer, but is running on a Python {1} interpreter.").format("3.6", ".".join(map(str, sys.version_info[:3]))))
-            QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible Python version."), self.__tr("This version of the OpenMW Export plugin requires a Python {0} interpreter or newer, but Mod Organizer has provided a Python {1} interpreter. Mod Organizer {2} is the earliest compatible version. You should check for an update.").format("3.6", ".".join(map(str, sys.version_info[:3])), "2.1.6"))
-            return False
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 3, 1):
-            self.__nexusBridge = self.__organizer.createNexusBridge()
-            self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
-            self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
+        self.__nexusBridge = self.__organizer.createNexusBridge()
+        self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
+        self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
         return True
 
     def name(self):
@@ -42,10 +37,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return "AnyOldName3"
 
     def description(self):
-        return self.__tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
+        return OpenMWExportPlugin.tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(3, 1, 0, mobase.ReleaseType.BETA)
+        return mobase.VersionInfo(4, 0, 0, mobase.ReleaseType.ALPHA)
 
     def requirements(self):
         return [
@@ -59,44 +54,36 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return []
 
     def displayName(self):
-        return self.__tr("Export to OpenMW")
+        return OpenMWExportPlugin.tr("Export to OpenMW")
 
     def tooltip(self):
-        return self.__tr("Exports the current mod list and plugin load order to OpenMW.cfg")
+        return OpenMWExportPlugin.tr("Exports the current mod list and plugin load order to OpenMW.cfg")
 
     def icon(self):
         return QIcon("plugins/openmw.ico")
-
-    def setParentWidget(self, widget):
-        self.__parentWidget = widget
     
     def display(self):
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
-            allModsByProfilePriority = self.__organizer.modList().allModsByProfilePriority
-        else:
-            allModsByProfilePriority = self.__organizer.modsSortedByProfilePriority
-
         # We should test if the current game is compatible with OpenMW here
         # We can't do that directly, so instead we just test if the current game is Morrowind
         game = self.__organizer.managedGame()
         if game.gameName() != "Morrowind":
-            QMessageBox.critical(self.__parentWidget, self.__tr("Incompatible game"), self.__tr("(At least when this plugin is being written) OpenMW only supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so the export will abort. If you think you know better than this message, update this plugin."))
+            QMessageBox.critical(self._parentWidget(), OpenMWExportPlugin.tr("Incompatible game"), OpenMWExportPlugin.tr("(At least when this plugin is being written) OpenMW only supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so the export will abort. If you think you know better than this message, update this plugin."))
             return
         # Give the user the opportunity to abort
-        confirmationButton = QMessageBox.question(self.__parentWidget, self.__tr("Before starting export..."), self.__tr("Before starting the export to OpenMW, please ensure you've backed up anything in OpenMW.cfg which you do not want to risk losing forever."), QMessageBox.StandardButtons(QMessageBox.Ok | QMessageBox.Cancel))
-        if confirmationButton != QMessageBox.Ok:
+        confirmationButton = QMessageBox.question(self._parentWidget(), OpenMWExportPlugin.tr("Before starting export..."), OpenMWExportPlugin.tr("Before starting the export to OpenMW, please ensure you've backed up anything in OpenMW.cfg which you do not want to risk losing forever."), QMessageBox.StandardButton(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel))
+        if confirmationButton != QMessageBox.StandardButton.Ok:
             return
         # Get the path to the OpenMW.cfg file
         configPath = self.__getOpenMWConfigPath()
         if not configPath.is_file():
-            QMessageBox.critical(self.__parentWidget, self.__tr("Config file not specified"), self.__tr("No config file was specified"))
+            QMessageBox.critical(self._parentWidget(), OpenMWExportPlugin.tr("Config file not specified"), OpenMWExportPlugin.tr("No config file was specified"))
             return
         # Clear out the existing data= and content= lines from openmw.cfg
         self.__clearOpenMWConfig(configPath)
         with configPath.open("a", encoding="utf-8") as openmwcfg:
             # write out data directories
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
-            for mod in allModsByProfilePriority():
+            for mod in self.__organizer.modList().allModsByProfilePriority():
                 self.__processMod(openmwcfg, mod)
             self.__processMod(openmwcfg, "Overwrite")
             
@@ -110,25 +97,22 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
                 openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
-        QMessageBox.information(self.__parentWidget, self.__tr("OpenMW Export Complete"), self.__tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
+        QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("OpenMW Export Complete"), OpenMWExportPlugin.tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
     
-    def __tr(self, str):
+    @staticmethod
+    def tr(str):
         return QCoreApplication.translate("OpenMWExportPlugin", str)
     
     def __processMod(self, configFile, modName):
-        if self.__organizer.appVersion() >= mobase.VersionInfo(2, 4, 0):
-            getMod = self.__organizer.modList().getMod
-        else:
-            getMod = self.__organizer.getMod
-        
         state = self.__organizer.modList().state(modName)
-        if (state & 0x2) != 0 or modName == "Overwrite":
-            path = getMod(modName).absolutePath()
+        if (state & mobase.ModState.ACTIVE) != 0 or modName == "Overwrite":
+            path = self.__organizer.modList().getMod(modName).absolutePath()
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
     
     def __processDataPath(self, dataPath):
-        # boost::filesystem::path uses a weird format in order to round-trip being constructed from a stream correctly, even when quotation characters are in the path
+        # boost::filesystem::path uses a weird format in order to round-trip being constructed from a stream correctly, even when quotation characters are in the path.
+        # Modern OpenMW versions don't require this unless the path begins or ends in whitespace, or begins with a double quote, but do it anyway for backwards compatibility.
         processedPath = "data=\""
         for character in dataPath:
             if character == '&' or character == '"':
@@ -159,11 +143,11 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         shutil.move(tempFilePath, configPath)
     
     def __getOpenMWConfigPath(self):
-        defaultLocation = Path(QStandardPaths.locate(QStandardPaths.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
+        defaultLocation = Path(QStandardPaths.locate(QStandardPaths.StandardLocation.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
         if defaultLocation.is_file():
             return defaultLocation
         # If we've got this far, then the user is doing something very weird, so they can find it themselves.
-        return Path(QFileDialog.getOpenFileName(self.__parentWidget, self.__tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
+        return Path(QFileDialog.getOpenFileName(self._parentWidget(), OpenMWExportPlugin.tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
     
     def __checkForUpdate(self, mainWindow):
         self.__nexusBridge.requestDescription("Morrowind", 45642, None)
@@ -171,8 +155,8 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     def __onDescriptionReceived(self, gameName, modID, userData, resultData):
         version = mobase.VersionInfo(resultData["version"])
         if self.version() < version:
-            response = QMessageBox.question(self._parentWidget(), self.__tr("Plugin update available"), self.__tr("{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?").format(self.displayName(), self.version(), version))
-            if response == QMessageBox.Yes:
+            response = QMessageBox.question(self._parentWidget(), OpenMWExportPlugin.tr("Plugin update available"), OpenMWExportPlugin.tr("{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?").format(self.displayName(), self.version(), version))
+            if response == QMessageBox.StandardButton.Yes:
                 QDesktopServices.openUrl(QUrl("https://www.nexusmods.com/morrowind/mods/45642"))
     
 def createPlugin():

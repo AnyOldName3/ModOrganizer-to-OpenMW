@@ -6,7 +6,7 @@ param (
     [switch] $Release
 )
 
-python -m PyQt5.pylupdate_main OpenMWExport.py -ts OpenMWExport_en.ts
+pylupdate6 OpenMWExport.py -ts OpenMWExport_en.ts
 
 if (!$?) {
     Write-Error "pylupdate failed." -ErrorAction Stop
