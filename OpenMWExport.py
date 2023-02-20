@@ -105,7 +105,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __processMod(self, configFile, modName):
         state = self.__organizer.modList().state(modName)
-        if (state & 0x2) != 0 or modName == "Overwrite":
+        if (state & mobase.ModState.ACTIVE) != 0 or modName == "Overwrite":
             path = self.__organizer.modList().getMod(modName).absolutePath()
             configLine = self.__processDataPath(path)
             configFile.write(configLine)
