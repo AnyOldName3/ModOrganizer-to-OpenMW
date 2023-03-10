@@ -11,12 +11,15 @@ import sys
 
 from PyQt6.QtCore import QCoreApplication, QStandardPaths, QUrl, qCritical
 from PyQt6.QtGui import QDesktopServices, QIcon
-from PyQt6.QtWidgets import QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QCheckBox, QFileDialog, QMessageBox
 
 if "mobase" not in sys.modules:
     import mobase
 
 class OpenMWExportPlugin(mobase.IPluginTool):
+    __NAME = "OpenMW Exporter"
+    __CONFIG_PATH = "config path"
+    __ALWAYS_USE_THIS_CONFIG_PATH = "always use this config path"
     
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
@@ -31,7 +34,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return True
 
     def name(self):
-        return "OpenMW Exporter"
+        return OpenMWExportPlugin.__NAME
 
     def author(self):
         return "AnyOldName3"
@@ -51,7 +54,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return (self.__organizer.managedGame().gameName() == "Morrowind")
 
     def settings(self):
-        return []
+        return [
+            mobase.PluginSetting(OpenMWExportPlugin.__CONFIG_PATH, OpenMWExportPlugin.tr("The most-recently-used openmw.cfg path."), ""),
+            mobase.PluginSetting(OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, OpenMWExportPlugin.tr("Whether to always use the saved openmw.cfg without asking each time."), False)
+        ]
 
     def displayName(self):
         return OpenMWExportPlugin.tr("Export to OpenMW")
@@ -75,7 +81,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             return
         # Get the path to the OpenMW.cfg file
         configPath = self.__getOpenMWConfigPath()
-        if not configPath.is_file():
+        if not (configPath.exists() and configPath.is_file()):
             QMessageBox.critical(self._parentWidget(), OpenMWExportPlugin.tr("Config file not specified"), OpenMWExportPlugin.tr("No config file was specified"))
             return
         # Clear out the existing data= and content= lines from openmw.cfg
@@ -143,12 +149,50 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         shutil.move(tempFilePath, configPath)
     
     def __getOpenMWConfigPath(self):
-        defaultLocation = Path(QStandardPaths.locate(QStandardPaths.StandardLocation.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
-        if defaultLocation.is_file():
-            return defaultLocation
-        # If we've got this far, then the user is doing something very weird, so they can find it themselves.
-        return Path(QFileDialog.getOpenFileName(self._parentWidget(), OpenMWExportPlugin.tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
-    
+        savedPath = Path(self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__CONFIG_PATH))
+        alwaysUse = self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH)
+        if alwaysUse:
+            if savedPath.exists() and savedPath.is_file():
+                return savedPath
+            else:
+                #: {0} is the key for the setting that's being reset.
+                QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("Saved openmw.cfg path unavailable"), OpenMWExportPlugin.tr("Saved openmw.cfg path unavailable. Resetting {0}").format(OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH))
+                self.__organizer.setPluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, False)
+        defaultPath = Path(QStandardPaths.locate(QStandardPaths.StandardLocation.DocumentsLocation, str(Path("My Games", "OpenMW", "openmw.cfg"))))
+
+        messageBox = QMessageBox(self._parentWidget())
+        messageBox.setText(OpenMWExportPlugin.tr("Choose openmw.cfg path"))
+        #: <div style=\"white-space:pre\">{0}</div> is the saved path.
+        #: <div style=\"white-space:pre\">{1}</div> is the default path.
+        #: <br> is a line break between them.
+        messageBox.setInformativeText(OpenMWExportPlugin.tr("Saved:<div style=\"white-space:pre\">{0}</div><br>Default:<div style=\"white-space:pre\">{1}</div>").format(savedPath, defaultPath))
+        savedButton = messageBox.addButton(OpenMWExportPlugin.tr("Saved"), QMessageBox.ButtonRole.AcceptRole)
+        savedButton.setEnabled(savedPath.exists() and savedPath.is_file())
+        defaultButton = messageBox.addButton(OpenMWExportPlugin.tr("Default"), QMessageBox.ButtonRole.AcceptRole)
+        defaultButton.setEnabled(defaultPath.exists() and defaultPath.is_file())
+        browseButton = messageBox.addButton(OpenMWExportPlugin.tr("Browse"), QMessageBox.ButtonRole.AcceptRole)
+        rememberCheckBox = QCheckBox(OpenMWExportPlugin.tr("Always use this path"))
+        messageBox.setCheckBox(rememberCheckBox)
+
+        messageBox.exec()
+
+        clickedButton = messageBox.clickedButton()
+        if clickedButton == savedButton:
+            path = savedPath
+        elif clickedButton == defaultButton:
+            path = defaultPath
+            if ((not savedPath.exists() or not savedPath.is_file()) and savedPath != defaultPath) or rememberCheckBox.isChecked():
+                self.__organizer.setPluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__CONFIG_PATH, str(defaultPath))
+        else:
+            path = Path(QFileDialog.getOpenFileName(self._parentWidget(), OpenMWExportPlugin.tr("Locate OpenMW Config File"), ".", "OpenMW Config File (openmw.cfg)")[0])
+            if savedPath != path:
+                self.__organizer.setPluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__CONFIG_PATH, str(path))
+
+        if rememberCheckBox.isChecked():
+            self.__organizer.setPluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, True)
+
+        return path
+
     def __checkForUpdate(self, mainWindow):
         self.__nexusBridge.requestDescription("Morrowind", 45642, None)
 
