@@ -20,6 +20,15 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     __NAME = "OpenMW Exporter"
     __CONFIG_PATH = "config path"
     __ALWAYS_USE_THIS_CONFIG_PATH = "always use this config path"
+    __SHOW_FOR_EXPERIMENTAL_GAMES = "show for experimental games"
+
+    __PARTIALLY_SUPPORTED_GAMES = [
+        "Morrowind",
+        "Oblivion",
+        "Fallout 3",
+        "Fallout New Vegas",
+        "Skyrim"
+    ]
     
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
@@ -47,16 +56,24 @@ class OpenMWExportPlugin(mobase.IPluginTool):
 
     def requirements(self):
         return [
-            mobase.PluginRequirementFactory.gameDependency("Morrowind")
+            mobase.PluginRequirementFactory.gameDependency(
+                OpenMWExportPlugin.__PARTIALLY_SUPPORTED_GAMES
+                if self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__SHOW_FOR_EXPERIMENTAL_GAMES) 
+                else "Morrowind"
+            )
         ]
 
     def isActive(self):
-        return (self.__organizer.managedGame().gameName() == "Morrowind")
+        if self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__SHOW_FOR_EXPERIMENTAL_GAMES):
+            return self.__organizer.managedGame().gameName() in OpenMWExportPlugin.__PARTIALLY_SUPPORTED_GAMES
+        else:
+            return self.__organizer.managedGame().gameName() == "Morrowind"
 
     def settings(self):
         return [
             mobase.PluginSetting(OpenMWExportPlugin.__CONFIG_PATH, OpenMWExportPlugin.tr("The most-recently-used openmw.cfg path."), ""),
-            mobase.PluginSetting(OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, OpenMWExportPlugin.tr("Whether to always use the saved openmw.cfg without asking each time."), False)
+            mobase.PluginSetting(OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, OpenMWExportPlugin.tr("Whether to always use the saved openmw.cfg without asking each time."), False),
+            mobase.PluginSetting(OpenMWExportPlugin.__SHOW_FOR_EXPERIMENTAL_GAMES, OpenMWExportPlugin.tr("Whether to show the Export to OpenMW option for games with only limited experimental support."), False)
         ]
 
     def displayName(self):
@@ -69,12 +86,6 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QIcon("plugins/openmw.ico")
     
     def display(self):
-        # We should test if the current game is compatible with OpenMW here
-        # We can't do that directly, so instead we just test if the current game is Morrowind
-        game = self.__organizer.managedGame()
-        if game.gameName() != "Morrowind":
-            QMessageBox.critical(self._parentWidget(), OpenMWExportPlugin.tr("Incompatible game"), OpenMWExportPlugin.tr("(At least when this plugin is being written) OpenMW only supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so the export will abort. If you think you know better than this message, update this plugin."))
-            return
         # Give the user the opportunity to abort
         confirmationButton = QMessageBox.question(self._parentWidget(), OpenMWExportPlugin.tr("Before starting export..."), OpenMWExportPlugin.tr("Before starting the export to OpenMW, please ensure you've backed up anything in OpenMW.cfg which you do not want to risk losing forever."), QMessageBox.StandardButton(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel))
         if confirmationButton != QMessageBox.StandardButton.Ok:
