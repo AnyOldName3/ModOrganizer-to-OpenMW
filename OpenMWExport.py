@@ -86,6 +86,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QIcon("plugins/openmw.ico")
     
     def display(self):
+        if self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__SHOW_FOR_EXPERIMENTAL_GAMES):
+            game = self.__organizer.managedGame()
+            if game.gameName() != "Morrowind":
+                QMessageBox.warning(self._parentWidget(), OpenMWExportPlugin.tr("Experimental game"), OpenMWExportPlugin.tr("(At least when this plugin is being written) OpenMW only fully supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so do not expect the game to be fully playable. If you think you know better than this message, update this plugin."))
         # Give the user the opportunity to abort
         confirmationButton = QMessageBox.question(self._parentWidget(), OpenMWExportPlugin.tr("Before starting export..."), OpenMWExportPlugin.tr("Before starting the export to OpenMW, please ensure you've backed up anything in OpenMW.cfg which you do not want to risk losing forever."), QMessageBox.StandardButton(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel))
         if confirmationButton != QMessageBox.StandardButton.Ok:

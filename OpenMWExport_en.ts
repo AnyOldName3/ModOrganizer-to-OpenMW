@@ -34,89 +34,99 @@
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="90" />
+      <location filename="OpenMWExport.py" line="92" />
+      <source>Experimental game</source>
+      <translation type="unfinished" />
+    </message>
+    <message>
+      <location filename="OpenMWExport.py" line="92" />
+      <source>(At least when this plugin is being written) OpenMW only fully supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so do not expect the game to be fully playable. If you think you know better than this message, update this plugin.</source>
+      <translation type="unfinished" />
+    </message>
+    <message>
+      <location filename="OpenMWExport.py" line="94" />
       <source>Before starting export...</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="90" />
+      <location filename="OpenMWExport.py" line="94" />
       <source>Before starting the export to OpenMW, please ensure you've backed up anything in OpenMW.cfg which you do not want to risk losing forever.</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="96" />
+      <location filename="OpenMWExport.py" line="100" />
       <source>Config file not specified</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="96" />
+      <location filename="OpenMWExport.py" line="100" />
       <source>No config file was specified</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="117" />
+      <location filename="OpenMWExport.py" line="121" />
       <source>OpenMW Export Complete</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="117" />
+      <location filename="OpenMWExport.py" line="121" />
       <source>The export to OpenMW completed successfully. The current setup was saved to {0}</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="170" />
+      <location filename="OpenMWExport.py" line="174" />
       <source>Saved openmw.cfg path unavailable</source>
       <extracomment>{0} is the key for the setting that's being reset.</extracomment>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="170" />
+      <location filename="OpenMWExport.py" line="174" />
       <source>Saved openmw.cfg path unavailable. Resetting {0}</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="175" />
+      <location filename="OpenMWExport.py" line="179" />
       <source>Choose openmw.cfg path</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="179" />
+      <location filename="OpenMWExport.py" line="183" />
       <source>Saved:&lt;div style="white-space:pre"&gt;{0}&lt;/div&gt;&lt;br&gt;Default:&lt;div style="white-space:pre"&gt;{1}&lt;/div&gt;</source>
       <extracomment>&lt;div style=\"white-space:pre\"&gt;{0}&lt;/div&gt; is the saved path. &lt;div style=\"white-space:pre\"&gt;{1}&lt;/div&gt; is the default path. &lt;br&gt; is a line break between them.</extracomment>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="180" />
+      <location filename="OpenMWExport.py" line="184" />
       <source>Saved</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="182" />
+      <location filename="OpenMWExport.py" line="186" />
       <source>Default</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="184" />
+      <location filename="OpenMWExport.py" line="188" />
       <source>Browse</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="185" />
+      <location filename="OpenMWExport.py" line="189" />
       <source>Always use this path</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="198" />
+      <location filename="OpenMWExport.py" line="202" />
       <source>Locate OpenMW Config File</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="213" />
+      <location filename="OpenMWExport.py" line="217" />
       <source>Plugin update available</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="213" />
+      <location filename="OpenMWExport.py" line="217" />
       <source>{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?</source>
       <translation type="unfinished" />
     </message>
