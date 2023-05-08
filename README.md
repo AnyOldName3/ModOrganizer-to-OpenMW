@@ -26,10 +26,8 @@ If you need to do anything else, you'll get a message box explaining it.
 
 ## Note:
 
-As of version 2.0.0, ModOrganizer-to-OpenMW has been upgraded to take advantage of Python 3.
-The upgrade to Python 3 is included in the MO 2.1.6 release, and older versions are not compatible with the latest version of this plugin.
-If MO 2.1.5 is still the latest release, you'll probably have to visit the Mod Organizer Discord server to get a release candidate build to use this.
-You can still use older versions of this plugin in older Mod Organizer builds (although MO 2.1.2 is the minimum which will work).
+As of version 4.0.0, ModOrganizer-to-OpenMW must use PyQt6 to work with MO2 2.5.x, forcing a breaking change and allowing old cruft to be stripped out.
+You can still use older versions of this plugin in older Mod Organizer builds (although MO2 2.1.2 is the minimum which will work, and MO2 2.1.6 is required for version 2.0.0+ of this plugin).
 
 ## Translating this plugin:
 
@@ -47,8 +45,8 @@ Because of that, some automation is provided:
 
 `install.ps1` will regenerate the `.ts` file and copy the plugin files to the location specified by its first argument or given via stdin.
 If the `-Release` flag is passed, it'll also copy the licence and readme, making it easier to do a release.
-To use it, you'll need a Python interpreter with some version of PyQt5's `PyQt5.pylupdate_main` package installed to be available in the current shell.
-If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt5` will get you what you need.
+To use it, you'll need a Python interpreter with some version of the `PyQt6` package and its `pylupdate6` command installed to be available in the current shell.
+If you've got a Mod Organizer 2 development environment on your machine, you can add its Python interpreter to the current shell's path, otherwise `pip install PyQt6` will get you what you need.
 
 Stubs for MO2's plugin API are available in the `mobase-stubs` pypi package.
 This package depends on the specific Python point release that the corresponding MO2 version uses as its interpreter.
@@ -62,6 +60,8 @@ Multiple Python installs can be present on the same machine, so you can have the
 
 By far the easiest way to get linting and pylupdate working is just to create a venv and install the packages in `requirements.txt`:
 ```powershell
+# Note: use Python version that matches MO2's embedded interpreter
+# You can use py -310 to launch Python 3.10, for example
 python -m venv env
 .\env\scripts\activate
 python -m pip install -r requirements.txt
