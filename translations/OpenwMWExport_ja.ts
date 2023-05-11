@@ -39,7 +39,7 @@
     <message>
       <location filename="OpenMWExport.py" line="92"/>
       <source>(At least when this plugin is being written) OpenMW only fully supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so do not expect the game to be fully playable. If you think you know better than this message, update this plugin.</source>
-      <translation>(少なくともこのプラグインが作成されている時点では)OpenMW は、Morrowindエンジン用に設計されたゲーム データのみを完全にサポートしています。管理されているゲームは、Morrowindではないため、ゲームが完全にプレイ可能であるとは期待しないでください。このメッセージよりもあなたのほうが詳しいと思った場合は、このプラグインを更新してください。</translation>
+      <translation>(少なくともこのプラグインが作成されている時点で)OpenMWは、Morrowindエンジン用に設計されたゲームデータのみを完全にサポートしています。管理されているゲームは、Morrowindではないため、ゲームが完全にプレイ可能であるとは期待しないでください。このメッセージよりもあなたのほうが詳しいと思った場合は、このプラグインを更新してください。</translation>
     </message>
     <message>
       <location filename="OpenMWExport.py" line="94"/>
