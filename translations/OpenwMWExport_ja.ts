@@ -32,89 +32,99 @@
       <translation>現在のModリストとプラグインの読み込み順序をOpenMW.cfgにエクスポートします</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="90"/>
+      <location filename="OpenMWExport.py" line="92"/>
+      <source>Experimental game</source>
+      <translation>実験的なゲーム</translation>
+    </message>
+    <message>
+      <location filename="OpenMWExport.py" line="92"/>
+      <source>(At least when this plugin is being written) OpenMW only fully supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so do not expect the game to be fully playable. If you think you know better than this message, update this plugin.</source>
+      <translation>(少なくともこのプラグインが作成されている時点では)OpenMW は、Morrowindエンジン用に設計されたゲーム データのみを完全にサポートしています。管理されているゲームは、Morrowindではないため、ゲームが完全にプレイ可能であるとは期待しないでください。このメッセージよりもあなたのほうが詳しいと思った場合は、このプラグインを更新してください。</translation>
+    </message>
+    <message>
+      <location filename="OpenMWExport.py" line="94"/>
       <source>Before starting export...</source>
       <translation>エクスポートを開始する前に...</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="90"/>
+      <location filename="OpenMWExport.py" line="94"/>
       <source>Before starting the export to OpenMW, please ensure you&apos;ve backed up anything in OpenMW.cfg which you do not want to risk losing forever.</source>
       <translation>OpenMWへのエクスポートを開始する前に、事前にOpenMW.cfgをバックアップしておいて、完全にロストする危険性がないようにしてください。</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="96"/>
+      <location filename="OpenMWExport.py" line="100"/>
       <source>Config file not specified</source>
       <translation>設定ファイルが指定されていません</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="96"/>
+      <location filename="OpenMWExport.py" line="100"/>
       <source>No config file was specified</source>
       <translation>設定ファイルが指定されていません</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="117"/>
+      <location filename="OpenMWExport.py" line="121"/>
       <source>OpenMW Export Complete</source>
       <translation>OpenMWエクスポート完了</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="117"/>
+      <location filename="OpenMWExport.py" line="121"/>
       <source>The export to OpenMW completed successfully. The current setup was saved to {0}</source>
       <translation>OpenMWへのエクスポートが正常に完了しました。現在の設定が {0} に保存されました</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="170"/>
+      <location filename="OpenMWExport.py" line="174"/>
       <source>Saved openmw.cfg path unavailable</source>
       <extracomment>{0} is the key for the setting that's being reset.</extracomment>
       <translation>保存された、openmw.cfgのパスを使用できません</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="170"/>
+      <location filename="OpenMWExport.py" line="174"/>
       <source>Saved openmw.cfg path unavailable. Resetting {0}</source>
       <translation>保存された、openmw.cfgのパスを使用できません。{0} をリセットしています</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="175"/>
+      <location filename="OpenMWExport.py" line="179"/>
       <source>Choose openmw.cfg path</source>
       <translation>openmw.cfgのパスを選択</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="179"/>
+      <location filename="OpenMWExport.py" line="183"/>
       <source>Saved:&lt;div style=&quot;white-space:pre&quot;&gt;{0}&lt;/div&gt;&lt;br&gt;Default:&lt;div style=&quot;white-space:pre&quot;&gt;{1}&lt;/div&gt;</source>
       <extracomment>&lt;div style=\&quot;white-space:pre\&quot;&gt;{0}&lt;/div&gt; is the saved path. &lt;div style=\&quot;white-space:pre\&quot;&gt;{1}&lt;/div&gt; is the default path. &lt;br&gt; is a line break between them.</extracomment>
       <translation>保存済み: &lt;div style=&quot;white-space:pre&quot;&gt;{0}&lt;/div&gt; デフォルト: &lt;div style=&quot;white-space:pre&quot;&gt;{1}&lt;/div&gt;</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="180"/>
+      <location filename="OpenMWExport.py" line="184"/>
       <source>Saved</source>
       <translation>保存しました</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="182"/>
+      <location filename="OpenMWExport.py" line="186"/>
       <source>Default</source>
       <translation>デフォルト</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="184"/>
+      <location filename="OpenMWExport.py" line="188"/>
       <source>Browse</source>
       <translation>ブラウズ</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="185"/>
+      <location filename="OpenMWExport.py" line="189"/>
       <source>Always use this path</source>
       <translation>常にこのパスを使用する</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="198"/>
+      <location filename="OpenMWExport.py" line="202"/>
       <source>Locate OpenMW Config File</source>
       <translation>OpenMW設定ファイルの所在</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="213"/>
+      <location filename="OpenMWExport.py" line="217"/>
       <source>Plugin update available</source>
       <translation>プラグインのアップデートが可能</translation>
     </message>
     <message>
-      <location filename="OpenMWExport.py" line="213"/>
+      <location filename="OpenMWExport.py" line="217"/>
       <source>{0} can be updated from version {1} to {2}. Do you want to open the download page in your browser?</source>
       <translation>{0}  はバージョン {1} から {2} に更新することができます。ブラウザでダウンロードページを開きますか？</translation>
     </message>
