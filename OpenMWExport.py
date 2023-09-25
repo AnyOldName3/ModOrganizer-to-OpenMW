@@ -86,8 +86,8 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return QIcon("plugins/openmw.ico")
     
     def display(self):
+        game = self.__organizer.managedGame()
         if self.__organizer.pluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__SHOW_FOR_EXPERIMENTAL_GAMES):
-            game = self.__organizer.managedGame()
             if game.gameName() != "Morrowind":
                 QMessageBox.warning(self._parentWidget(), OpenMWExportPlugin.tr("Experimental game"), OpenMWExportPlugin.tr("(At least when this plugin is being written) OpenMW only fully supports game data designed for the Morrowind engine. The game being managed is not Morrowind, so do not expect the game to be fully playable. If you think you know better than this message, update this plugin."))
         # Give the user the opportunity to abort
