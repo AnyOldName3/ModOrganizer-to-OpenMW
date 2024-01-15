@@ -117,7 +117,10 @@ class OpenMWExportPlugin(mobase.IPluginTool):
                     loadOrder[loadIndex] = plugin
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
-                openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
+                if loadOrder[pluginIndex].lower().endswith(".gc.esp"):
+                    openmwcfg.write("groundcover=" + loadOrder[pluginIndex] + "\n")
+                else:
+                    openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
         QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("OpenMW Export Complete"), OpenMWExportPlugin.tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
     
     @staticmethod
@@ -153,7 +156,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             lastLine = ""
             with configPath.open("r", encoding="utf-8-sig") as openmwcfg:
                 for line in openmwcfg:
-                    if not line.startswith("data=") and not line.startswith("content="):
+                    if not line.startswith("data=") and not line.startswith("content=") and not line.lower().endswith(".gc.esp"):
                         f.write(line)
                         lastLine = line
             # ensure the last line ended with a line break
