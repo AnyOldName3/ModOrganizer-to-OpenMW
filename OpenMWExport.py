@@ -124,6 +124,8 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
                 pluginName = loadOrder[pluginIndex]
+                if pluginName.lower().endswith(".omwaddon.esp") or pluginName.lower().endswith(".omwscripts.esp"):
+                    pluginName = pluginName.rsplit('.', 1)[0]
                 if pluginName.lower() not in existing_groundcovers:
                     openmwcfg.write("content=" + pluginName + "\n")
         QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("OpenMW Export Complete"), OpenMWExportPlugin.tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
