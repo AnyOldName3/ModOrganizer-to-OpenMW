@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import QCheckBox, QFileDialog, QMessageBox
 if "mobase" not in sys.modules:
     import mobase
 
-class OpenMWExportPlugin(mobase.IPluginTool):
+class OpenMWExportPlugin(mobase.IPluginTool, mobase.IPluginDiagnose):
     __NAME = "OpenMW Exporter"
     __CONFIG_PATH = "config path"
     __ALWAYS_USE_THIS_CONFIG_PATH = "always use this config path"
@@ -32,6 +32,8 @@ class OpenMWExportPlugin(mobase.IPluginTool):
     
     def __init__(self):
         super(OpenMWExportPlugin, self).__init__()
+        # I think this shouldn't be necessary and a base class should be calling super
+        mobase.IPluginDiagnose.__init__(self)
         self.__organizer : mobase.IOrganizer
         self.__nexusBridge : mobase.IModRepositoryBridge
 
@@ -52,7 +54,7 @@ class OpenMWExportPlugin(mobase.IPluginTool):
         return OpenMWExportPlugin.tr("Transfers mod list (left pane) to data fields in OpenMW.cfg and plugin list (right pane, plugins tab) to content fields in OpenMW.cfg. This allows you to run OpenMW with the current profile's setup from outside of Mod Organizer")
 
     def version(self):
-        return mobase.VersionInfo(4, 0, 0, mobase.ReleaseType.FINAL)
+        return mobase.VersionInfo(4, 1, 0, mobase.ReleaseType.PRE_ALPHA)
 
     def requirements(self):
         return [
@@ -119,6 +121,21 @@ class OpenMWExportPlugin(mobase.IPluginTool):
             for pluginIndex in range(len(loadOrder)):
                 openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
         QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("OpenMW Export Complete"), OpenMWExportPlugin.tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
+
+    def activeProblems(self):
+        return [0] if self.__organizer.profile().invalidationActive()[0] else []
+
+    def shortDescription(self, key):
+        return OpenMWExportPlugin.tr("Automatic Archive Invalidation is enabled.")
+
+    def fullDescription(self, key):
+        return OpenMWExportPlugin.tr("Automatic Archive Invalidation is enabled in the current profile. Automatic Archive Invalidation attempts to work around a problem in the later Bethesda Games Studios games. It is unnecessary for Morrowind or OpenMW, and the archive used is known to crash the game. You should disable it in the Manage Profiles window.")
+
+    def hasGuidedFix(self, key):
+        return False
+
+    def startGuidedFix(self, key):
+        pass
     
     @staticmethod
     def tr(str):
