@@ -103,6 +103,12 @@ class OpenMWExportPlugin(mobase.IPluginTool, mobase.IPluginDiagnose):
             return
         # Clear out the existing data= and content= lines from openmw.cfg
         self.__clearOpenMWConfig(configPath)
+        # get already enabled groundcover plugins
+        existing_groundcovers = set()
+        with configPath.open("r", encoding="utf-8") as openmwcfg:
+            for line in openmwcfg:
+                if line.lower().startswith("groundcover="):
+                    existing_groundcovers.add(line.strip().split('=')[1].lower())
         with configPath.open("a", encoding="utf-8") as openmwcfg:
             # write out data directories
             openmwcfg.write(self.__processDataPath(game.dataDirectory().absolutePath()))
@@ -119,7 +125,9 @@ class OpenMWExportPlugin(mobase.IPluginTool, mobase.IPluginDiagnose):
                     loadOrder[loadIndex] = plugin
             # actually write out the list
             for pluginIndex in range(len(loadOrder)):
-                openmwcfg.write("content=" + loadOrder[pluginIndex] + "\n")
+                pluginName = loadOrder[pluginIndex]
+                if pluginName.lower() not in existing_groundcovers:
+                    openmwcfg.write("content=" + pluginName + "\n")
         QMessageBox.information(self._parentWidget(), OpenMWExportPlugin.tr("OpenMW Export Complete"), OpenMWExportPlugin.tr("The export to OpenMW completed successfully. The current setup was saved to {0}").format(configPath))
 
     def activeProblems(self):
