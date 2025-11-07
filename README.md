@@ -1,7 +1,8 @@
 # ModOrganizer-to-OpenMW
+
 A Mod Organizer plugin to export your VFS, plugin selection and load order to OpenMW
 
-## Why you'd want this:
+## Why you'd want this
 
 * OpenMW has no GUI for mod directory installation and management.
 Mod Organizer does.
@@ -13,27 +14,43 @@ OpenMW has its own VFS, so if you use it, you can just start OpenMW normally.
 * Mod Organizer (more specifically its VFS implementation, USVFS) has some issues that mean it doesn't always work as intended stemming from the complexity of injecting a VFS into a process only designed to load things from one directory.
 OpenMW's VFS is far more reliable because it's 'supposed to be there' and was therefore much simpler to write without bugs.
 
-## Installation:
+## Highlights
+
+* Manual exports remain available from the **Tools → Export to OpenMW** menu for complete control when you want it.
+* Automatic exports keep OpenMW.cfg in sync whenever mods or plugins change, using smart debouncing to avoid redundant work.
+* Dummy plugin creation now covers `.omwaddon`, `.omwscripts`, and `.omwgame` content automatically so OpenMW sees everything without manual ESP stubs.
+* Verbose logging can be toggled on to surface detailed diagnostic messages in MO2's log window while you troubleshoot setup issues.
+* Performance mode (enabled by default) caches filesystem lookups and skips heavy scans while you browse, keeping MO2 responsive even on large mod lists.
+
+## Installation
 
 Put `OpenMWExport.py` and (optionally) `openmw.ico` in your Mod Organizer `plugins` directory.
 If you don't want to use this plugin in English and a translation `.qm` file exists for this plugin in your desired language, put it in your Mod Organizer `translations` directory.
 
-## Usage:
+## Usage
 
 You'll find an 'Export to OpenMW' option under the tools menu.
 Clicking it will make the plugin do its thing.
 If you need to do anything else, you'll get a message box explaining it.
 
-## Note:
+### Settings you should know about
+
+* **Automatic export when changes detected** – keeps OpenMW.cfg synced in the background; disable it if you prefer fully manual control.
+* **Toggle verbose logging** – writes detailed status updates to the log, perfect for diagnosing missing content or permission issues.
+* **Enable performance mode** – reduces heavy filesystem scanning while navigating MO2; turn it off if you want maximum eagerness at the cost of extra work.
+
+Automatic exports use a short debounce window so rapid-fire changes coalesce into one OpenMW.cfg write. When verbose logging is enabled, you will see exactly why an export ran (or was skipped) and which dummy plugins were created.
+
+## Note
 
 As of version 4.0.0, ModOrganizer-to-OpenMW must use PyQt6 to work with MO2 2.5.x, forcing a breaking change and allowing old cruft to be stripped out.
 You can still use older versions of this plugin in older Mod Organizer builds (although MO2 2.1.2 is the minimum which will work, and MO2 2.1.6 is required for version 2.0.0+ of this plugin).
 
-## Translating this plugin:
+## Translating this plugin
 
 As of version 1.1, this plugin has a `.ts` file.
 This allows people who know multiple languages to create translations of it.
-You can contribute your own translations at https://www.transifex.com/anyoldname3/modorganizer-to-openmw and I'll try to include them in the next release.
+You can contribute your own translations at <https://www.transifex.com/anyoldname3/modorganizer-to-openmw> and I'll try to include them in the next release.
 If you want to translate to a language that isn't listed there, there should be a Request Language button somewhere.
 
 ## Building this plugin
@@ -41,7 +58,6 @@ If you want to translate to a language that isn't listed there, there should be 
 As this plugin is pure Python, it doesn't need building - you can just copy the files into place by hand.
 However, obviously that won't update the translation files, and can become annoying when working on the plugin, as you'll need to do it repeatedly.
 Because of that, some automation is provided:
-
 
 `install.ps1` will regenerate the `.ts` file and copy the plugin files to the location specified by its first argument or given via stdin.
 If the `-Release` flag is passed, it'll also copy the licence and readme, making it easier to do a release.
@@ -51,14 +67,17 @@ If you've got a Mod Organizer 2 development environment on your machine, you can
 Stubs for MO2's plugin API are available in the `mobase-stubs` pypi package.
 This package depends on the specific Python point release that the corresponding MO2 version uses as its interpreter.
 If you see this error message
-```
+
+```text
 ERROR: Could not find a version that satisfies the requirement mobase-stubs
 ERROR: No matching distribution found for mobase-stubs
 ```
+
 you are most likely trying to install the package into a too-old or too-new Python environment.
 Multiple Python installs can be present on the same machine, so you can have the required version in parallel.
 
 By far the easiest way to get linting and pylupdate working is just to create a venv and install the packages in `requirements.txt`:
+
 ```powershell
 # Note: use Python version that matches MO2's embedded interpreter
 # You can use py -310 to launch Python 3.10, for example
@@ -66,6 +85,7 @@ python -m venv env
 .\env\scripts\activate
 python -m pip install -r requirements.txt
 ```
+
 Once this venv exists, editors like VS Code should pick it up and use it automatically (although they might need restarting first).
 
 Also, a VS Code `tasks.json` file is provided that will call the install script as a build task.
@@ -77,6 +97,7 @@ Battles were waged to try and make `mypy` see the stubs when they weren't in a v
 Just use the venv.
 
 You'll probably want to create a `.vscode/settings.json` resembling:
+
 ```json
 {
     "python.linting.pylintEnabled": false,
@@ -84,6 +105,7 @@ You'll probably want to create a `.vscode/settings.json` resembling:
     "python.pythonPath": "env\\Scripts\\python.exe"
 }
 ```
+
 This isn't checked in as you'll likely end up with local changes.
 It would be nice if JSON had include directives like YAML.
 
@@ -92,3 +114,12 @@ It would be nice if JSON had include directives like YAML.
 * As the Mod Organizer Morrowind plugin matures, this tool will gradually become more useful.
 * This plugin could be adapted to use callbacks so it runs automatically whenever you make any changes in Mod Organizer
 * If Mod Organizer ever re-implements archive management, this plugin could copy Mod Organizer's list to OpenMW's `fallback-archive` list.
+
+## Credits
+
+* **AnyOldName3** – original author and long-time maintainer of the exporter.
+* **ignamiranda** – fork maintainer who introduced the initial manual dummy plugin strategy and continues modern enhancements.
+* **Holt59** – contributor for plugin diagnostics and refactors that kept the codebase healthy.
+* **Syer10** – expanded compatibility and helped the plugin handle experimental games.
+
+Huge thanks to everyone in the MO2 and OpenMW communities who files issues, tests new features, and keeps the pipeline fresh.
