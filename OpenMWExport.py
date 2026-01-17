@@ -41,6 +41,7 @@ class OpenMWExportPlugin(mobase.IPluginTool, mobase.IPluginDiagnose):
         self.__organizer = organizer
         self.__nexusBridge = self.__organizer.createNexusBridge()
         self.__nexusBridge.descriptionAvailable.connect(self.__onDescriptionReceived)
+        self.__organizer.onUserInterfaceInitialized(self.__registerGameFeatures)
         self.__organizer.onUserInterfaceInitialized(self.__checkForUpdate)
         return True
 
@@ -224,6 +225,26 @@ class OpenMWExportPlugin(mobase.IPluginTool, mobase.IPluginDiagnose):
             self.__organizer.setPluginSetting(OpenMWExportPlugin.__NAME, OpenMWExportPlugin.__ALWAYS_USE_THIS_CONFIG_PATH, True)
 
         return path
+    
+    def __registerGameFeatures(self, mainWindow):
+        class OpenMWDataChecker(mobase.ModDataChecker):
+            def __init__(self):
+                super().__init__()
+
+            def dataLooksValid(self, filetree):
+                for entry in filetree:
+                    if entry.isDir():
+                        if entry.name().lower() in {"l10n", "mygui", "scripts"}:
+                            return mobase.ModDataChecker.VALID
+                    else:
+                        if Path(entry.name().lower()).suffix in {".omwaddon", ".omwgame", ".omwscripts"}:
+                            return mobase.ModDataChecker.VALID
+                return mobase.ModDataChecker.INVALID
+
+            def fix(self, filetree):
+                return
+        
+        self.__organizer.gameFeatures().registerFeature(OpenMWDataChecker(), 101)
 
     def __checkForUpdate(self, mainWindow):
         self.__nexusBridge.requestDescription("Morrowind", 45642, None)
